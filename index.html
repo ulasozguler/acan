@@ -1,0 +1,27 @@
+<script src="js/grid.js"></script>
+<script src="js/world.js"></script>
+
+<canvas id="test"></canvas>
+
+<script>
+    function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    var width = 20;
+    var height = 20;
+
+    var w = new World(width, height);
+
+    for(var i = 0; i < 50; i++) {
+        w.setAgent(rand(0, 19), rand(0, 19), {alive: 1});
+    }
+
+    var grid = new Grid(width, height);
+
+    for(var el of w.getData()) {
+        grid.fill(el.x, el.y);
+    }
+
+    grid.draw('test');
+</script>
