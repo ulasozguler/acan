@@ -1,27 +1,118 @@
+<script src="js/utils.js"></script>
 <script src="js/grid.js"></script>
 <script src="js/world.js"></script>
+<link rel="stylesheet" href="main.css"/>
 
 <canvas id="test"></canvas>
 
+<div id="controls">
+    <a id="run">Run</a>
+    <a id="pause">Pause</a>
+    <br/>
+    <br/>
+    <label for="initialAlive">Initial alive count</label>
+    <input type="number" id="initialAlive" value="1250">
+    <a id="reset">Reset</a>
+</div>
+
+
 <script>
-    function rand(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    var width = 50;
+    var height = 50;
+    var defaultCell = {alive: 0};
+
+    var w = new World(width, height, defaultCell);
+
+    // game of life
+    w.setBehaviour(function(state, x, y) {
+        var props = w.getCell(x, y);
+        var neighbours = w.getNeighbours(x, y);
+
+        var aliveNeighbours = 0;
+        for(var cell of neighbours) {
+            if(cell.props.alive) {
+                aliveNeighbours += 1;
+            }
+        }
+
+        if(props.alive) {
+            // Any live cell with fewer than two live neighbours dies, as if caused by under-population.
+            if(aliveNeighbours < 2) {
+                return [{x: x, y: y, props: {alive: 0}}];
+            }
+
+            // Any live cell with two or three live neighbours lives on to the next generation.
+
+            // Any live cell with more than three live neighbours dies, as if by over-population.
+            if(aliveNeighbours > 3) {
+                return [{x: x, y: y, props: {alive: 0}}];
+            }
+
+        } else {
+            // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+            if(aliveNeighbours == 3) {
+                return [{x: x, y: y, props: {alive: 1}}];
+            }
+        }
+
+        return [];
+    });
+
+    function generateRandom(count) {
+        // random generation
+        w.clear();
+        for(var i = 0; i < count; i++) {
+            w.setCell(randInt(0, width - 1), randInt(0, height - 1), {alive: 1});
+        }
     }
 
-    var width = 20;
-    var height = 20;
-
-    var w = new World(width, height);
-
-    for(var i = 0; i < 50; i++) {
-        w.setAgent(rand(0, 19), rand(0, 19), {alive: 1});
+    function redraw() {
+        var grid = new Grid(width, height);
+        for(var el of w.getData()) {
+            // TODO: set styles according to prop
+            if(el.props.alive) {
+                grid.fill(el.x, el.y);
+            }
+        }
+        grid.draw('test');
     }
 
-    var grid = new Grid(width, height);
+    var paused = true;
 
-    for(var el of w.getData()) {
-        grid.fill(el.x, el.y);
+    function run() {
+        w.step();
+        redraw();
+        if(!paused) {
+            setTimeout(run, 100);
+        }
     }
 
-    grid.draw('test');
+    // ui stuff
+    var runButton = document.getElementById('run');
+    var pauseButton = document.getElementById('pause');
+    pauseButton.style.display = 'none';
+
+    runButton.addEventListener('click', function() {
+        if(paused) {
+            paused = false;
+            run();
+            runButton.style.display = 'none';
+            pauseButton.style.display = 'block';
+        }
+    });
+
+    pauseButton.addEventListener('click', function() {
+        paused = true;
+        runButton.style.display = 'block';
+        pauseButton.style.display = 'none';
+    });
+
+    document.getElementById('reset').addEventListener('click', function() {
+        generateRandom(Number(document.getElementById('initialAlive').value));
+        redraw();
+    });
+
+    // initial
+    generateRandom(Number(document.getElementById('initialAlive').value));
+    redraw();
 </script>
