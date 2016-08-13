@@ -1,13 +1,22 @@
 class World {
 
-	constructor(horizontalCellCount, verticalCellCount, defaultProps = null) {
+	constructor(horizontalCellCount, verticalCellCount) {
 		this.xCellCount = horizontalCellCount;
 		this.yCellCount = verticalCellCount;
-		this.defaultProps = defaultProps;
-		this.cells = {};
 
+		this.cells = {};
 		this._idSeperator = '-';
 		this._generation = 0;
+	}
+
+	setSimulation(sim) {
+		this.sim = sim;
+		sim.init(this);
+	}
+
+	reset() {
+		this.clear();
+		this.sim.init(this);
 	}
 
 	getId(x, y) {
@@ -22,7 +31,7 @@ class World {
 		if(this.cells.hasOwnProperty(this.getId(x, y))) {
 			return this.cells[this.getId(x, y)];
 		}
-		return this.defaultProps;
+		return this.sim.defaultCell();
 	}
 
 	clear() {
@@ -64,16 +73,12 @@ class World {
 		return result;
 	}
 
-	setBehaviour(behaviourFunction) {
-		this.behaviour = behaviourFunction
-	}
-
 	step() {
 		// clone state
 		var newState = JSON.parse(JSON.stringify(this.cells));
 
 		for(var cell of this.iterateCells()) {
-			var modifiedCells = this.behaviour(this, cell.x, cell.y);
+			var modifiedCells = this.sim.behaviour(this, cell.x, cell.y);
 			for(var modifiedCell of modifiedCells) {
 				newState[this.getId(modifiedCell.x, modifiedCell.y)] = modifiedCell.props;
 			}

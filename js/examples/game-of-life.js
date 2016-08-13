@@ -1,4 +1,17 @@
-class GameOfLife {
+class GameOfLife extends Simulation {
+	static defaultCell() {
+		return {alive: 0}
+	}
+
+	static init(w) {
+		// random generation
+		var width = w.xCellCount;
+		var height = w.yCellCount;
+		for(var i = 0; i < (width * height / 2); i++) {
+			w.setCell(randInt(0, width - 1), randInt(0, height - 1), {alive: 1});
+		}
+	}
+
 	static behaviour(w, x, y) {
 		var props = w.getCell(x, y);
 		var neighbours = w.getNeighbours(x, y);
@@ -33,5 +46,9 @@ class GameOfLife {
 		// nothing changed
 		return [];
 	}
+
+	//static colorPicker(props) {
+	//	return props.alive;
+	//}
 }
 
