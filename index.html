@@ -8,6 +8,7 @@
 <div id="controls">
     <a id="run">Run</a>
     <a id="pause">Pause</a>
+    <a id="step">Step</a>
     <br/>
     <br/>
     <label for="initialAlive">Initial alive count</label>
@@ -87,6 +88,11 @@
         }
     }
 
+    function step() {
+        w.step();
+        redraw();
+    }
+
     // ui stuff
     var runButton = document.getElementById('run');
     var pauseButton = document.getElementById('pause');
@@ -106,6 +112,8 @@
         runButton.style.display = 'block';
         pauseButton.style.display = 'none';
     });
+
+    document.getElementById('step').addEventListener('click', step);
 
     document.getElementById('reset').addEventListener('click', function() {
         generateRandom(Number(document.getElementById('initialAlive').value));
