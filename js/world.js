@@ -10,8 +10,14 @@ class World {
 	}
 
 	setSimulation(sim) {
+		this.clear();
 		this.sim = sim;
 		sim.init(this);
+	}
+
+	clear() {
+		this.cells = {};
+		this._generation = 0;
 	}
 
 	reset() {
@@ -32,11 +38,6 @@ class World {
 			return this.cells[this.getId(x, y)];
 		}
 		return this.sim.defaultCell();
-	}
-
-	clear() {
-		this.cells = {};
-		this._generation = 0;
 	}
 
 	getNeighbours(x, y, d = 1) {

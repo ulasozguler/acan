@@ -1,15 +1,18 @@
 * {
 	font-family: "Helvetica Neue", sans-serif;
 }
+
 body {
 	margin: 0;
 	padding: 0;
 }
+
 #controls {
 	padding: 10px;
 	float: left;
 }
-#controls a, #controls input  {
+
+#controls a, #controls input, #controls select {
 	cursor: pointer;
 	border: 1px solid black;
 	padding: 5px;
@@ -18,10 +21,17 @@ body {
 	text-align: center;
 	margin: 0 0 10px 0;
 }
+
+#controls select {
+	font-size: 14px;
+	width: 112px;
+}
+
 canvas {
 	float: left;
 	margin: 10px;
 }
+
 #legend {
 	clear: both;
 	margin: 15px;

@@ -26,14 +26,12 @@ class LangtonsAnt extends Simulation {
 
 		if(props.color == 0) {
 			ant.direction = (props.direction + 1) % 4;  // turn right
-			console.log(1, ant.direction)
 		} else {
 			// turn left
 			ant.direction = props.direction - 1;
 			if(ant.direction == -1) {
 				ant.direction = 3;
 			}
-			console.log(2, ant.direction)
 		}
 
 		leftCell.color = Math.abs(props.color - 1);  // flip color

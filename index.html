@@ -10,13 +10,17 @@
 <canvas id="test"></canvas>
 
 <div id="controls">
+    <select id="simulation">
+        <option value="GameOfLife">Game of Life</option>
+        <option value="LangtonsAnt">Langton's Ant</option>
+    </select>
     <a id="run">Run</a>
     <a id="pause">Pause</a>
     <a id="step">Step</a>
     <a id="reset">Reset</a>
 </div>
 
-<div id="legend">dsads</div>
+<div id="legend"></div>
 
 
 <script>
@@ -78,8 +82,41 @@
         redraw();
     });
 
+    var sims = {
+        'GameOfLife': GameOfLife,
+        'LangtonsAnt': LangtonsAnt
+    };
+    function changeSim(simName) {
+        var sim = sims[simName];
+        w.setSimulation(sim);
+        w.reset();
+
+        grid.reset();
+        if(sim.colorPicker) {
+            grid.colorPicker = sim.colorPicker;
+        }
+
+        redraw();
+    }
+
+    var simSelect = document.getElementById('simulation');
+    simSelect.addEventListener('change', function(e) {
+        changeSim(e.target.value);
+    });
+
     // initial
     window.onload = function() {
+        if(window.location.hash) {
+            var sim = window.location.hash.substring(1);
+            if(sims.hasOwnProperty(sim)) {
+                simSelect.value = sim;
+                changeSim(sim);
+            }
+        }
+
         redraw();
+
+        paused = false;
+        run();
     };
 </script>
