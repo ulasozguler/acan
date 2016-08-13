@@ -68,14 +68,14 @@
     }
 
     function redraw() {
-        var grid = new Grid(width, height);
+        var grid = new Grid('test', width, height);
         for(var el of w.getData()) {
             // TODO: set styles according to prop
             if(el.props.alive) {
                 grid.fill(el.x, el.y);
             }
         }
-        grid.draw('test');
+        grid.draw();
     }
 
     var paused = true;
