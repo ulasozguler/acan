@@ -7,6 +7,7 @@ class World {
 		this.cells = {};
 
 		this._idSeperator = '-';
+		this._generation = 0;
 	}
 
 	getId(x, y) {
@@ -26,6 +27,7 @@ class World {
 
 	clear() {
 		this.cells = {};
+		this._generation = 0;
 	}
 
 	getNeighbours(x, y, d = 1) {
@@ -78,5 +80,6 @@ class World {
 		}
 
 		this.cells = newState;
+		this._generation++;
 	}
 }
