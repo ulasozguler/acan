@@ -78,7 +78,7 @@
         grid.draw('test');
     }
 
-    var paused = false;
+    var paused = true;
 
     function run() {
         w.step();
@@ -124,6 +124,5 @@
     window.onload = function() {
         generateRandom(Number(document.getElementById('initialAlive').value));
         redraw();
-        run();
     };
 </script>
