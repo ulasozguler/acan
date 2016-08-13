@@ -59,6 +59,7 @@
     var runButton = document.getElementById('run');
     var pauseButton = document.getElementById('pause');
 
+    runButton.style.display = 'none';
     runButton.addEventListener('click', function() {
         if(paused) {
             paused = false;
@@ -68,7 +69,6 @@
         }
     });
 
-    pauseButton.style.display = 'none';
     pauseButton.addEventListener('click', function() {
         paused = true;
         runButton.style.display = 'block';
