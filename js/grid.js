@@ -29,8 +29,10 @@ class Grid {
 
 	box(x, y) {
 		// +-1 because borders
-		this.ctx.fillRect((x * this.cellSize) + 1, (y * this.cellSize) + 1,
-						  this.cellSize - 1, this.cellSize - 1);
+		this.ctx.fillRect(
+			(x * this.cellSize) + 1, (y * this.cellSize) + 1,
+			this.cellSize - 1, this.cellSize - 1
+		);
 	}
 
 	clear() {
@@ -38,6 +40,12 @@ class Grid {
 		// alternative is calculating all state changes and redrawing accordingly.
 		this.createCanvas();
 		this.cells = {};
+	}
+
+	reset() {
+		this.clear();
+		this.colorPicker = this.defaultColorPicker;
+		this.colorMap = new Map();
 	}
 
 	draw() {
@@ -102,13 +110,13 @@ class Grid {
 		return JSON.stringify(props);
 	}
 
-	colorPicker(props) {
+	defaultColorPicker(props) {
 		/**
-		 * default color picker, overridable by this.setColorPicker.
+		 * default color picker.
 		 * gets a hash of props and assings it one of the predefined colors.
 		 * fails if you have more state than predefined color count.
 		 * this is an expensive process, it may be a good idea to override it.
-		**/
+		 **/
 		var key = Grid._hash(props);
 		if(this.colorMap.has(key)) {
 			return this.colorMap.get(key);
@@ -119,8 +127,8 @@ class Grid {
 		return nextColor;
 	}
 
-	setColorPicker(colorPickerMethod) {
-		this.colorPicker = colorPickerMethod
+	colorPicker(props) {
+		return this.defaultColorPicker(props);
 	}
 
 	updateData(cellDataArray) {

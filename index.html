@@ -1,42 +1,40 @@
+<title>Acan Demo Page</title>
 <script src="js/utils.js"></script>
 <script src="js/grid.js"></script>
 <script src="js/world.js"></script>
+<script src="js/simulation-interface.js"></script>
 <script src="js/examples/game-of-life.js"></script>
+<script src="js/examples/langtons-ant.js"></script>
 <link rel="stylesheet" href="main.css"/>
 
 <canvas id="test"></canvas>
 
 <div id="controls">
+    <select id="simulation">
+        <option value="GameOfLife">Game of Life</option>
+        <option value="LangtonsAnt">Langton's Ant</option>
+    </select>
     <a id="run">Run</a>
     <a id="pause">Pause</a>
     <a id="step">Step</a>
-    <br/>
-    <br/>
-    <label for="initialAlive">Initial alive count</label>
-    <input type="number" id="initialAlive" value="1250">
     <a id="reset">Reset</a>
 </div>
 
-<div id="legend">dsads</div>
+<div id="legend"></div>
 
 
 <script>
+    var simulation = GameOfLife;
     var width = 75;
     var height = 50;
-    var defaultCell = {alive: 0};
     var stepDelay = 100;
 
-    var w = new World(width, height, defaultCell);
-    w.setBehaviour(GameOfLife.behaviour);
+    var w = new World(width, height);
+    w.setSimulation(simulation);
 
     var grid = new Grid('test', width, height);
-
-    function generateRandom(count) {
-        // random generation
-        w.clear();
-        for(var i = 0; i < count; i++) {
-            w.setCell(randInt(0, width - 1), randInt(0, height - 1), {alive: 1});
-        }
+    if(simulation.colorPicker) {
+        grid.colorPicker = simulation.colorPicker;
     }
 
     function redraw() {
@@ -60,7 +58,6 @@
 
     var runButton = document.getElementById('run');
     var pauseButton = document.getElementById('pause');
-    pauseButton.style.display = 'none';
 
     runButton.addEventListener('click', function() {
         if(paused) {
@@ -71,6 +68,7 @@
         }
     });
 
+    pauseButton.style.display = 'none';
     pauseButton.addEventListener('click', function() {
         paused = true;
         runButton.style.display = 'block';
@@ -80,13 +78,45 @@
     document.getElementById('step').addEventListener('click', step);
 
     document.getElementById('reset').addEventListener('click', function() {
-        generateRandom(Number(document.getElementById('initialAlive').value));
+        w.reset();
         redraw();
+    });
+
+    var sims = {
+        'GameOfLife': GameOfLife,
+        'LangtonsAnt': LangtonsAnt
+    };
+    function changeSim(simName) {
+        var sim = sims[simName];
+        w.setSimulation(sim);
+        w.reset();
+
+        grid.reset();
+        if(sim.colorPicker) {
+            grid.colorPicker = sim.colorPicker;
+        }
+
+        redraw();
+    }
+
+    var simSelect = document.getElementById('simulation');
+    simSelect.addEventListener('change', function(e) {
+        changeSim(e.target.value);
     });
 
     // initial
     window.onload = function() {
-        generateRandom(Number(document.getElementById('initialAlive').value));
+        if(window.location.hash) {
+            var sim = window.location.hash.substring(1);
+            if(sims.hasOwnProperty(sim)) {
+                simSelect.value = sim;
+                changeSim(sim);
+            }
+        }
+
         redraw();
+
+        paused = false;
+        run();
     };
 </script>
