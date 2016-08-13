@@ -1,12 +1,13 @@
 class World {
 
-	constructor(width, height, defaultProps = null) {
-		this.width = width;
-		this.height = height;
+	constructor(horizontalCellCount, verticalCellCount, defaultProps = null) {
+		this.xCellCount = horizontalCellCount;
+		this.yCellCount = verticalCellCount;
 		this.defaultProps = defaultProps;
 		this.cells = {};
 
 		this._idSeperator = '-';
+		this._generation = 0;
 	}
 
 	getId(x, y) {
@@ -26,6 +27,7 @@ class World {
 
 	clear() {
 		this.cells = {};
+		this._generation = 0;
 	}
 
 	getNeighbours(x, y, d = 1) {
@@ -33,8 +35,12 @@ class World {
 		x = Number(x);
 		y = Number(y);
 
-		for(var i = Math.max(x - d, 0); i <= Math.min(x + d, this.width); i++) {
-			for(var j = Math.max(y - d, 0); j <= Math.min(y + d, this.height); j++) {
+		for(var i = Math.max(x - d, 0); i <= Math.min(x + d, this.xCellCount); i++) {
+			for(var j = Math.max(y - d, 0); j <= Math.min(y + d, this.yCellCount); j++) {
+				if(i == x && j == y) {
+					// itself
+					continue;
+				}
 				result.push({x: i, y: j, props: this.getCell(i, j)})
 			}
 		}
@@ -43,8 +49,8 @@ class World {
 	}
 
 	*iterateCells() {
-		for(var x = 0; x < this.width; x++) {
-			for(var y = 0; y < this.height; y++) {
+		for(var x = 0; x < this.xCellCount; x++) {
+			for(var y = 0; y < this.yCellCount; y++) {
 				yield {x: x, y: y, props: this.getCell(x, y)}
 			}
 		}
@@ -74,5 +80,6 @@ class World {
 		}
 
 		this.cells = newState;
+		this._generation++;
 	}
 }

@@ -1,8 +1,8 @@
 class Grid {
-	constructor(width, height) {
+	constructor(width, height, cellSize = 10) {
 		this.xCellCount = width;
 		this.yCellCount = height;
-		this.cellSize = 10;
+		this.cellSize = cellSize;
 		this.cells = {};
 	}
 
