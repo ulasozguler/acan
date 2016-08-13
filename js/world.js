@@ -73,7 +73,7 @@ class World {
 		var newState = JSON.parse(JSON.stringify(this.cells));
 
 		for(var cell of this.iterateCells()) {
-			var modifiedCells = this.behaviour(this.cells, cell.x, cell.y);
+			var modifiedCells = this.behaviour(this, cell.x, cell.y);
 			for(var modifiedCell of modifiedCells) {
 				newState[this.getId(modifiedCell.x, modifiedCell.y)] = modifiedCell.props;
 			}

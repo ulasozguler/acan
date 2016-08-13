@@ -22,3 +22,7 @@ canvas {
 	float: left;
 	margin: 10px;
 }
+#legend {
+	clear: both;
+	margin: 15px;
+}
