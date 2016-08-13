@@ -1,39 +1,61 @@
 class Grid {
 	constructor(width, height) {
-		this.width = width;
-		this.height = height;
+		this.xCellCount = width;
+		this.yCellCount = height;
+		this.cellSize = 10;
 		this.cells = {};
+	}
+
+	line(ctx, x1, y1, x2, y2) {
+		// 0.5 because canvas counts from middle of pixel
+		ctx.moveTo(x1 + 0.5, y1 + 0.5);
+		ctx.lineTo(x2 + 0.5, y2 + 0.5);
+		ctx.stroke();
+	}
+
+	box(ctx, x, y) {
+		// +-1 because borders
+		ctx.fillRect((x * this.cellSize) + 1, (y * this.cellSize) + 1,
+			         this.cellSize - 1, this.cellSize - 1);
 	}
 
 	draw(domElementID) {
 		var canvas = document.getElementById(domElementID);
-		var cellSize = 10;
-		canvas.setAttribute("width", (this.width * cellSize) + 2 + '');
-		canvas.setAttribute("height", (this.height * cellSize) + 2 + '');
+		var borderSize = 1;
 
-		var ctx = canvas.getContext("2d");
-		ctx.fillStyle = "#000000";
+		canvas.setAttribute('width', (this.xCellCount * this.cellSize) + 2 + '');
+		canvas.setAttribute('height', (this.yCellCount * this.cellSize) + 2 + '');
+
+		var ctx = canvas.getContext('2d');
+		ctx.strokeStyle = 'grey';
+		ctx.imageSmoothingEnabled = false;
+		ctx.lineWidth = borderSize;
 		ctx.imageSmoothingEnabled = false;
 
-		for(x = 0; x <= this.width; x++) {
-			ctx.moveTo(1 + x * cellSize, 1);
-			ctx.lineTo(1 + x * cellSize, 1 + this.height * cellSize);
-			ctx.stroke();
+		// draw grid
+		let y_min = 0;
+		let y_max = this.yCellCount * this.cellSize;
+		for(let x = 0; x <= this.xCellCount; x++) {
+			let x_coor = x * this.cellSize;
+			this.line(ctx, x_coor, y_min, x_coor, y_max);
 		}
 
-		for(y = 0; y <= this.height; y++) {
-			ctx.moveTo(1, 1 + y * cellSize);
-			ctx.lineTo(1 + this.height * cellSize, 1 + y * cellSize);
-			ctx.stroke();
+		let x_min = 0;
+		let x_max = this.xCellCount * this.cellSize;
+		for(let y = 0; y <= this.yCellCount; y++) {
+			let y_coor = y * this.cellSize;
+			this.line(ctx, x_min, y_coor, x_max, y_coor);
 		}
 
-		for(var x in this.cells) {
+		// draw agents
+		ctx.fillStyle = '#000000';
+		for(let x in this.cells) {
 			if(!this.cells.hasOwnProperty(x)) continue;
 			if(this.cells[x]) {
-				for(var y in this.cells[x]) {
+				for(let y in this.cells[x]) {
 					if(!this.cells[x].hasOwnProperty(y)) continue;
 					if(this.cells[x][y] == 1) {
-						ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+						this.box(ctx, x, y);
 					}
 				}
 			}
