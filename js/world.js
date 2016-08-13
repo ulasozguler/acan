@@ -35,6 +35,10 @@ class World {
 
 		for(var i = Math.max(x - d, 0); i <= Math.min(x + d, this.xCellCount); i++) {
 			for(var j = Math.max(y - d, 0); j <= Math.min(y + d, this.yCellCount); j++) {
+				if(i == x && j == y) {
+					// itself
+					continue;
+				}
 				result.push({x: i, y: j, props: this.getCell(i, j)})
 			}
 		}
