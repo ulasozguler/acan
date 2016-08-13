@@ -1,8 +1,8 @@
 class World {
 
-	constructor(width, height, defaultProps = null) {
-		this.width = width;
-		this.height = height;
+	constructor(horizontalCellCount, verticalCellCount, defaultProps = null) {
+		this.xCellCount = horizontalCellCount;
+		this.yCellCount = verticalCellCount;
 		this.defaultProps = defaultProps;
 		this.cells = {};
 
@@ -33,8 +33,8 @@ class World {
 		x = Number(x);
 		y = Number(y);
 
-		for(var i = Math.max(x - d, 0); i <= Math.min(x + d, this.width); i++) {
-			for(var j = Math.max(y - d, 0); j <= Math.min(y + d, this.height); j++) {
+		for(var i = Math.max(x - d, 0); i <= Math.min(x + d, this.xCellCount); i++) {
+			for(var j = Math.max(y - d, 0); j <= Math.min(y + d, this.yCellCount); j++) {
 				result.push({x: i, y: j, props: this.getCell(i, j)})
 			}
 		}
@@ -43,8 +43,8 @@ class World {
 	}
 
 	*iterateCells() {
-		for(var x = 0; x < this.width; x++) {
-			for(var y = 0; y < this.height; y++) {
+		for(var x = 0; x < this.xCellCount; x++) {
+			for(var y = 0; y < this.yCellCount; y++) {
 				yield {x: x, y: y, props: this.getCell(x, y)}
 			}
 		}
