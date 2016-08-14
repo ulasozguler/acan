@@ -12,7 +12,7 @@ class Simulation {
 		 */
 	}
 
-	static behaviour(w, x, y) {
+	static behaviour(world, newState, x, y) {
 		/**
 		 * Called every iteration to calculate next generation.
 		 */

@@ -36,3 +36,12 @@ canvas {
 	clear: both;
 	margin: 15px;
 }
+
+#stats td {
+	font-size: 13px;
+}
+
+#stats td:nth-child(odd) {
+	text-align: right;
+	padding-right: 5px;
+}

@@ -5,7 +5,9 @@ class World {
 		this.yCellCount = verticalCellCount;
 
 		this.cells = {};
+		this.stats = {};
 		this.generation = 0;
+		this.finished = false;
 		this._idSeperator = '-';
 	}
 
@@ -17,7 +19,9 @@ class World {
 
 	clear() {
 		this.cells = {};
+		this.stats = {};
 		this.generation = 0;
+		this.finished = false;
 	}
 
 	reset() {
@@ -86,17 +90,47 @@ class World {
 	}
 
 	step() {
+		// no updates on last generation
+		if(this.finished)
+			return true;
+
 		// clone state
 		var newState = JSON.parse(JSON.stringify(this.cells));
+		this.finished = true;
 
 		for(var cell of this.iterateCells()) {
-			var modifiedCells = this.sim.behaviour(this, cell.x, cell.y);
+			var modifiedCells = this.sim.behaviour(this, newState, cell.x, cell.y);
 			for(var modifiedCell of modifiedCells) {
+				this.finished = false;
 				newState[this.getId(modifiedCell.x, modifiedCell.y)] = modifiedCell.props;
 			}
 		}
 
 		this.cells = newState;
 		this.generation++;
+		return this.finished;
+	}
+
+	// stats
+	setStat(name, val) {
+		this.stats[name] = val;
+	}
+
+	incStat(name) {
+		if(!this.stats[name]) {
+			this.stats[name] = 0;
+		}
+		this.stats[name]++;
+	}
+
+	decStat(name) {
+		if(!this.stats[name]) {
+			this.stats[name] = 0;
+		}
+		this.stats[name]--;
+	}
+
+	getStats() {
+		return this.stats;
 	}
 }
