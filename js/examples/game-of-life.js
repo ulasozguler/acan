@@ -12,7 +12,7 @@ class GameOfLife extends Simulation {
 		}
 	}
 
-	static behaviour(w, x, y) {
+	static behaviour(w, newState, x, y) {
 		var props = w.getCell(x, y);
 		var neighbours = w.getNeighbours(x, y);
 

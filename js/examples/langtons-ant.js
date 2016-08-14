@@ -15,7 +15,7 @@ class LangtonsAnt extends Simulation {
 		w.setCell(Math.round(width / 2), Math.round(height / 2), props);
 	}
 
-	static behaviour(w, x, y) {
+	static behaviour(w, newState, x, y) {
 		var props = w.getCell(x, y);
 		if(!props.isAnt) {
 			return [];

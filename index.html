@@ -5,6 +5,7 @@
 <script src="js/simulation-interface.js"></script>
 <script src="js/examples/game-of-life.js"></script>
 <script src="js/examples/langtons-ant.js"></script>
+<script src="js/examples/example1.js"></script>
 <link rel="stylesheet" href="main.css"/>
 
 <canvas id="test"></canvas>
@@ -13,6 +14,7 @@
     <select id="simulation">
         <option value="GameOfLife">Game of Life</option>
         <option value="LangtonsAnt">Langton's Ant</option>
+        <option value="Example1">Example 1</option>
     </select>
     <a id="run">Run</a>
     <a id="pause">Pause</a>
@@ -20,7 +22,7 @@
     <a id="reset">Reset</a>
 
     <label for="stepDelay">Step delay (ms)</label>
-    <input type="number" id="stepDelay" value="100">
+    <input type="number" id="stepDelay" value="00">
 
     <label for="iterationCount">Iteration #</label>
     <input type="number" id="iterationCount" value="0" disabled>
@@ -92,7 +94,8 @@
 
     var sims = {
         'GameOfLife': GameOfLife,
-        'LangtonsAnt': LangtonsAnt
+        'LangtonsAnt': LangtonsAnt,
+        'Example1': Example1
     };
     function changeSim(simName) {
         var sim = sims[simName];

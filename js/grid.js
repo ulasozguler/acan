@@ -140,7 +140,7 @@ class Grid {
 		}
 		grid.draw();
 
-		console.log(+new Date() - start);  // track performance
+		//console.log(+new Date() - start);  // track performance
 	}
 
 	getColorMapHTML() {

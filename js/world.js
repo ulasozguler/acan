@@ -6,6 +6,7 @@ class World {
 
 		this.cells = {};
 		this.generation = 0;
+		this.finished = false;
 		this._idSeperator = '-';
 	}
 
@@ -18,6 +19,7 @@ class World {
 	clear() {
 		this.cells = {};
 		this.generation = 0;
+		this.finished = false;
 	}
 
 	reset() {
@@ -86,12 +88,18 @@ class World {
 	}
 
 	step() {
+		// no updates on last generation
+		if(this.finished)
+			return;
+
 		// clone state
 		var newState = JSON.parse(JSON.stringify(this.cells));
+		this.finished = true;
 
 		for(var cell of this.iterateCells()) {
-			var modifiedCells = this.sim.behaviour(this, cell.x, cell.y);
+			var modifiedCells = this.sim.behaviour(this, newState, cell.x, cell.y);
 			for(var modifiedCell of modifiedCells) {
+				this.finished = false;
 				newState[this.getId(modifiedCell.x, modifiedCell.y)] = modifiedCell.props;
 			}
 		}
