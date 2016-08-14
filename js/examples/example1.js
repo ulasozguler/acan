@@ -26,27 +26,34 @@ class Example1 extends Simulation {
 			return [];
 		}
 
-		var neighbourRaces = {};
-		var willMove = false;
+		// if don't have at least minTolerance neighbours, move.
+		// unless your neighbour count is less than your minTolerance.
+		var sameRace = 0;
+		var empty = 0;
+		var willMove = true;
+		var minTolerance = 2;
 		for(var cell of neighbours) {
-
-			// skip empty cells
+			// empty cells
 			if(!cell.props || !cell.props.race) {
+				empty++;
 				continue;
 			}
 
-			if(!neighbourRaces.hasOwnProperty(cell.props.race)) {
-				neighbourRaces[cell.props.race] = 0;
+			// same race neighbours
+			if(cell.props.race == props.race) {
+				sameRace++;
+				if(sameRace > minTolerance) {
+					willMove = false;
+					break;
+				}
 			}
-			neighbourRaces[cell.props.race]++;
-			if(neighbourRaces[cell.props.race] > 1) {
-				willMove = cell.props.race != props.race;
-				break;
-			}
+		}
+		if(empty > 8 - minTolerance) {
+			willMove = false;
 		}
 
 		if(willMove) {
-			// moved too many times in total, needs to move again. die.
+			// moved too many times in total. needs to move again, die.
 			if(props.moved > 100) {
 				return [{x: x, y: y, props: {}}]
 			}
@@ -55,14 +62,14 @@ class Example1 extends Simulation {
 			let randX = 0;
 			let randY = 0;
 
-			// try to move x times. if nowhere to go, die.
+			// try to move x times to random places. if nowhere to go, die.
 			let found = false;
 			for(let i = 0; i < 10; i++) {
 				randX = randInt(0, w.xCellCount - 1);
 				randY = randInt(0, w.yCellCount - 1);
 				randCell = newState[w.getId(randX, randY)];
 
-				if(!randCell || !randCell.hasOwnProperty('race')) {
+				if(!randCell || !randCell.race) {  // empty cell
 					found = true;
 					break;
 				}
