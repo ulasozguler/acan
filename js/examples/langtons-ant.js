@@ -12,7 +12,7 @@ class LangtonsAnt extends Simulation {
 			direction: 2,  // 0,1,2,3 for every direction
 			color: 0
 		};
-		w.setCell(randInt(0, width - 1), randInt(0, height - 1), props);
+		w.setCell(Math.round(width / 2), Math.round(height / 2), props);
 	}
 
 	static behaviour(w, x, y) {
