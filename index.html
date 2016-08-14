@@ -141,7 +141,7 @@
     // initial
     window.onload = function() {
         if(window.location.hash) {
-            var sim = window.location.hash.substring(1);
+            var sim = decodeURIComponent(window.location.hash.substring(1));
             if(sims.hasOwnProperty(sim)) {
                 simSelect.value = sim;
                 changeSim(sim);
