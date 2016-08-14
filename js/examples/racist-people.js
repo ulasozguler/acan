@@ -1,4 +1,4 @@
-class Example1 extends Simulation {
+class RacistPeople extends Simulation {
 	static defaultCell() {
 		return {}
 	}
