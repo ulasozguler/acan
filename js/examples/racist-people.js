@@ -12,7 +12,9 @@ class RacistPeople extends Simulation {
 
 		for(var i = 0; i < width; i++) {
 			for(var j = 0; j < height; j++) {
-				w.setCell(i, j, {moved: 0, race: randInt(skipColor, raceCount + skipColor)});
+				var race = randInt(skipColor, raceCount + skipColor);
+				w.setCell(i, j, {moved: 0, race: race});
+				w.incStat('Initial');
 			}
 		}
 	}
@@ -54,7 +56,8 @@ class RacistPeople extends Simulation {
 
 		if(willMove) {
 			// moved too many times in total. needs to move again, die.
-			if(props.moved > 100) {
+			if(props.moved > 50) {
+				w.incStat('Exhaustion');
 				return [{x: x, y: y, props: {}}]
 			}
 
@@ -76,10 +79,12 @@ class RacistPeople extends Simulation {
 			}
 
 			if(!found) {
+				w.incStat('Suicide');
 				return [{x: x, y: y, props: {}}]
 			}
 
 			// move
+			w.incStat('Move');
 			if(!props.moved) {
 				props.moved = 0;
 			}
@@ -95,40 +100,6 @@ class RacistPeople extends Simulation {
 		if(!props || !props.race)
 			return 0; // empty cell - white
 		return props.race + 1;
-	}
-
-	static setStat(name, val) {
-		if(!Example1.stats) {
-			Example1.stats = {}
-		}
-		Example1.stats[name] = val;
-	}
-
-	static incStat(name) {
-		if(!Example1.stats) {
-			Example1.stats = {}
-		}
-		if(!Example1.stats[name]) {
-			Example1.stats[name] = 0;
-		}
-		Example1.stats[name]++;
-	}
-
-	static decStat(name) {
-		if(!Example1.stats) {
-			Example1.stats = {}
-		}
-		if(!Example1.stats[name]) {
-			Example1.stats[name] = 0;
-		}
-		Example1.stats[name]--;
-	}
-
-	static getStats() {
-		if(!Example1.stats) {
-			Example1.stats = {}
-		}
-		return Example1.stats;
 	}
 }
 

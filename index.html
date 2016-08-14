@@ -22,6 +22,8 @@
 
     <label for="iterationCount">Iteration #</label>
     <input type="number" id="iterationCount" value="0" disabled>
+
+    <div id="stats"></div>
 </div>
 
 <div id="legend"></div>
@@ -50,6 +52,7 @@
     function redraw() {
         grid.updateData(world.getData());
         document.getElementById('legend').innerHTML = grid.getColorMapHTML();
+        renderStats();
     }
 
     function step() {
@@ -80,6 +83,17 @@
         }
 
         redraw();
+    }
+
+    function renderStats() {
+        var html = '<table>';
+        var stats = world.getStats();
+        for(var stat in stats) {
+            if(!stats.hasOwnProperty(stat)) continue;
+            html += '<tr><td>' + stat + '</td><td>' + stats[stat] + '</td></tr>';
+        }
+        html += '</table>';
+        document.getElementById('stats').innerHTML = html;
     }
 
     // ui stuff

@@ -5,6 +5,7 @@ class World {
 		this.yCellCount = verticalCellCount;
 
 		this.cells = {};
+		this.stats = {};
 		this.generation = 0;
 		this.finished = false;
 		this._idSeperator = '-';
@@ -18,6 +19,7 @@ class World {
 
 	clear() {
 		this.cells = {};
+		this.stats = {};
 		this.generation = 0;
 		this.finished = false;
 	}
@@ -107,5 +109,28 @@ class World {
 		this.cells = newState;
 		this.generation++;
 		return this.finished;
+	}
+
+	// stats
+	setStat(name, val) {
+		this.stats[name] = val;
+	}
+
+	incStat(name) {
+		if(!this.stats[name]) {
+			this.stats[name] = 0;
+		}
+		this.stats[name]++;
+	}
+
+	decStat(name) {
+		if(!this.stats[name]) {
+			this.stats[name] = 0;
+		}
+		this.stats[name]--;
+	}
+
+	getStats() {
+		return this.stats;
 	}
 }
