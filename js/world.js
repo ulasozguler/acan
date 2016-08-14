@@ -26,6 +26,17 @@ class World {
 	}
 
 	getId(x, y) {
+		// fixes edges
+		x = x % this.xCellCount;
+		if(x < 0) {
+			x += this.xCellCount
+		}
+
+		y = y % this.yCellCount;
+		if(y < 0) {
+			y += this.yCellCount;
+		}
+
 		return x.toString() + this._idSeperator + y.toString();
 	}
 
@@ -45,8 +56,8 @@ class World {
 		x = Number(x);
 		y = Number(y);
 
-		for(var i = Math.max(x - d, 0); i <= Math.min(x + d, this.xCellCount); i++) {
-			for(var j = Math.max(y - d, 0); j <= Math.min(y + d, this.yCellCount); j++) {
+		for(var i = x - d; i <= x + d; i++) {
+			for(var j = y - d; j <= y + d; j++) {
 				if(i == x && j == y) {
 					// itself
 					continue;
