@@ -90,7 +90,7 @@ class World {
 	step() {
 		// no updates on last generation
 		if(this.finished)
-			return;
+			return true;
 
 		// clone state
 		var newState = JSON.parse(JSON.stringify(this.cells));
@@ -106,5 +106,6 @@ class World {
 
 		this.cells = newState;
 		this.generation++;
+		return this.finished;
 	}
 }

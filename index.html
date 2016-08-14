@@ -11,11 +11,7 @@
 <canvas id="test"></canvas>
 
 <div id="controls">
-    <select id="simulation">
-        <option value="GameOfLife">Game of Life</option>
-        <option value="LangtonsAnt">Langton's Ant</option>
-        <option value="Example1">Example 1</option>
-    </select>
+    <select id="simulation"></select>
     <a id="run">Run</a>
     <a id="pause">Pause</a>
     <a id="step">Step</a>
@@ -32,75 +28,51 @@
 
 
 <script>
+    // init
+    var sims = {
+        'Game of Life': GameOfLife,
+        'Langton\'s Ant': LangtonsAnt,
+        'Example1': Example1
+    };
     var simulation = GameOfLife;
     var width = 75;
     var height = 50;
 
-    var w = new World(width, height);
-    w.setSimulation(simulation);
+    var world = new World(width, height);
+    world.setSimulation(simulation);
 
     var grid = new Grid('test', width, height);
     if(simulation.colorPicker) {
         grid.colorPicker = simulation.colorPicker;
     }
 
+    // helpers
     function redraw() {
-        grid.updateData(w.getData());
+        grid.updateData(world.getData());
         document.getElementById('legend').innerHTML = grid.getColorMapHTML();
     }
 
-    var generationDisplay = document.getElementById('iterationCount');
     function step() {
-        w.step();
-        generationDisplay.value = w.generation;
+        var res = world.step();
+        generationDisplay.value = world.generation;
         redraw();
+        return res;
     }
 
-    // ui stuff
-    var stepDelayInput = document.getElementById('stepDelay');
     var paused = true;
-    function run() {
-        step();
+    function startLoop() {
+        if(step()) { // finished
+            pause();
+        }
         if(!paused) {
-            setTimeout(run, Number(stepDelayInput.value));
+            setTimeout(startLoop, Number(stepDelayInput.value));
         }
     }
 
-    var runButton = document.getElementById('run');
-    var pauseButton = document.getElementById('pause');
-
-    runButton.style.display = 'none';
-    runButton.addEventListener('click', function() {
-        if(paused) {
-            paused = false;
-            run();
-            runButton.style.display = 'none';
-            pauseButton.style.display = 'block';
-        }
-    });
-
-    pauseButton.addEventListener('click', function() {
-        paused = true;
-        runButton.style.display = 'block';
-        pauseButton.style.display = 'none';
-    });
-
-    document.getElementById('step').addEventListener('click', step);
-
-    document.getElementById('reset').addEventListener('click', function() {
-        w.reset();
-        redraw();
-    });
-
-    var sims = {
-        'GameOfLife': GameOfLife,
-        'LangtonsAnt': LangtonsAnt,
-        'Example1': Example1
-    };
     function changeSim(simName) {
         var sim = sims[simName];
-        w.setSimulation(sim);
-        w.reset();
+        world.setSimulation(sim);
+        world.reset();
 
         grid.reset();
         if(sim.colorPicker) {
@@ -110,7 +82,44 @@
         redraw();
     }
 
+    // ui stuff
+    var stepDelayInput = document.getElementById('stepDelay');
+    var generationDisplay = document.getElementById('iterationCount');
+    var runButton = document.getElementById('run');
+    var pauseButton = document.getElementById('pause');
+    var stepButton = document.getElementById('step');
+    var resetButton = document.getElementById('reset');
     var simSelect = document.getElementById('simulation');
+
+    // add simulations
+    for(var sim in sims) {
+        if(!sims.hasOwnProperty(sim)) continue;
+        var option = document.createElement('option');
+        option.value = sim;
+        option.innerText = sim;
+        simSelect.appendChild(option);
+    }
+
+    function run() {
+        paused = false;
+        runButton.style.display = 'none';
+        pauseButton.style.display = 'block';
+        startLoop();
+    }
+
+    function pause() {
+        paused = true;
+        runButton.style.display = 'block';
+        pauseButton.style.display = 'none';
+    }
+
+    runButton.addEventListener('click', run);
+    pauseButton.addEventListener('click', pause);
+    stepButton.addEventListener('click', step);
+    resetButton.addEventListener('click', function() {
+        world.reset();
+        redraw();
+    });
     simSelect.addEventListener('change', function(e) {
         changeSim(e.target.value);
     });
@@ -124,10 +133,6 @@
                 changeSim(sim);
             }
         }
-
-        redraw();
-
-        paused = false;
         run();
     };
 </script>
