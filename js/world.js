@@ -5,8 +5,8 @@ class World {
 		this.yCellCount = verticalCellCount;
 
 		this.cells = {};
+		this.generation = 0;
 		this._idSeperator = '-';
-		this._generation = 0;
 	}
 
 	setSimulation(sim) {
@@ -17,7 +17,7 @@ class World {
 
 	clear() {
 		this.cells = {};
-		this._generation = 0;
+		this.generation = 0;
 	}
 
 	reset() {
@@ -86,6 +86,6 @@ class World {
 		}
 
 		this.cells = newState;
-		this._generation++;
+		this.generation++;
 	}
 }

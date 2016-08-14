@@ -18,6 +18,12 @@
     <a id="pause">Pause</a>
     <a id="step">Step</a>
     <a id="reset">Reset</a>
+
+    <label for="stepDelay">Step delay (ms)</label>
+    <input type="number" id="stepDelay" value="100">
+
+    <label for="iterationCount">Iteration #</label>
+    <input type="number" id="iterationCount" value="0" disabled>
 </div>
 
 <div id="legend"></div>
@@ -27,7 +33,6 @@
     var simulation = GameOfLife;
     var width = 75;
     var height = 50;
-    var stepDelay = 100;
 
     var w = new World(width, height);
     w.setSimulation(simulation);
@@ -42,17 +47,20 @@
         document.getElementById('legend').innerHTML = grid.getColorMapHTML();
     }
 
+    var generationDisplay = document.getElementById('iterationCount');
     function step() {
         w.step();
+        generationDisplay.value = w.generation;
         redraw();
     }
 
     // ui stuff
+    var stepDelayInput = document.getElementById('stepDelay');
     var paused = true;
     function run() {
         step();
         if(!paused) {
-            setTimeout(run, stepDelay);
+            setTimeout(run, Number(stepDelayInput.value));
         }
     }
 
