@@ -3,13 +3,15 @@
 }
 
 body {
-	margin: 0;
+	margin: 10px;
 	padding: 0;
+	display: flex;
 }
 
 #controls {
-	padding: 10px;
 	float: left;
+	margin: 0 10px;
+	text-align: center;
 }
 
 #controls a, #controls input, #controls select {
@@ -27,14 +29,17 @@ body {
 	width: 112px;
 }
 
+#controls input {
+	width: 112px;
+}
+
 canvas {
 	float: left;
-	margin: 10px;
 }
 
 #legend {
 	clear: both;
-	margin: 15px;
+	margin: 15px 0;
 }
 
 #stats td {
@@ -44,4 +49,11 @@ canvas {
 #stats td:nth-child(odd) {
 	text-align: right;
 	padding-right: 5px;
+}
+
+#code {
+	flex: 1 1 auto;
+	align-self: stretch;
+	font-family: monospace;
+	font-size: 13px;
 }

@@ -16,6 +16,7 @@
     <a id="pause">Pause</a>
     <a id="step">Step</a>
     <a id="reset">Reset</a>
+    <a id="load"><< Load</a>
 
     <label for="stepDelay">Step delay (ms)</label>
     <input type="number" id="stepDelay" value="100">
@@ -24,29 +25,24 @@
     <input type="number" id="iterationCount" value="0" disabled>
 
     <div id="stats"></div>
+    <div id="legend"></div>
 </div>
 
-<div id="legend"></div>
+<textarea id="code"></textarea>
 
 
 <script>
     // init
     var sims = {
-        'Game of Life': GameOfLife,
-        'Langton\'s Ant': LangtonsAnt,
-        'Racist People': RacistPeople
+        'Game of Life': 'game-of-life',
+        'Langton\'s Ant': 'langtons-ant',
+        'Racist People': 'racist-people'
     };
-    var simulation = GameOfLife;
     var width = 75;
     var height = 50;
 
     var world = new World(width, height);
-    world.setSimulation(simulation);
-
     var grid = new Grid('test', width, height);
-    if(simulation.colorPicker) {
-        grid.colorPicker = simulation.colorPicker;
-    }
 
     // helpers
     function redraw() {
@@ -63,17 +59,20 @@
     }
 
     var paused = true;
+    var timeoutRef = null;
     function startLoop() {
         if(step()) { // finished
             pause();
         }
         if(!paused) {
-            setTimeout(startLoop, Number(stepDelayInput.value));
+            timeoutRef = setTimeout(startLoop, Number(stepDelayInput.value));
         }
     }
 
-    function changeSim(simName) {
-        var sim = sims[simName];
+    function loadFromCode() {
+        pause();
+
+        var sim = eval(codeArea.value);
         world.setSimulation(sim);
         world.reset();
 
@@ -82,7 +81,18 @@
             grid.colorPicker = sim.colorPicker;
         }
 
-        redraw();
+        run();
+    }
+
+    function changeSim(sim) {
+        fetch('./js/examples/' + sim + '.js', {
+            method: 'get'
+        }).then(function(response) {
+            return response.text();
+        }).then(function(text) {
+            codeArea.value = text.replace(/\t/g, '    ');
+            loadFromCode(codeArea.value);
+        });
     }
 
     function renderStats() {
@@ -103,13 +113,15 @@
     var pauseButton = document.getElementById('pause');
     var stepButton = document.getElementById('step');
     var resetButton = document.getElementById('reset');
+    var loadButton = document.getElementById('load');
     var simSelect = document.getElementById('simulation');
+    var codeArea = document.getElementById('code');
 
     // add simulations
     for(var sim in sims) {
         if(!sims.hasOwnProperty(sim)) continue;
         var option = document.createElement('option');
-        option.value = sim;
+        option.value = sims[sim];
         option.innerText = sim;
         simSelect.appendChild(option);
     }
@@ -125,6 +137,7 @@
         paused = true;
         runButton.style.display = 'block';
         pauseButton.style.display = 'none';
+        clearTimeout(timeoutRef);
     }
 
     runButton.addEventListener('click', run);
@@ -134,19 +147,23 @@
         world.reset();
         redraw();
     });
+    loadButton.addEventListener('click', loadFromCode);
     simSelect.addEventListener('change', function(e) {
         changeSim(e.target.value);
     });
 
     // initial
     window.onload = function() {
+        var sim = 'game-of-life';
         if(window.location.hash) {
-            var sim = decodeURIComponent(window.location.hash.substring(1));
-            if(sims.hasOwnProperty(sim)) {
+            sim = decodeURIComponent(window.location.hash.substring(1));
+        }
+        for(var simName in sims) {
+            if(!sims.hasOwnProperty(simName)) continue;
+            if(sim == sims[simName]) {
                 simSelect.value = sim;
                 changeSim(sim);
             }
         }
-        run();
     };
 </script>
