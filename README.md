@@ -4,8 +4,8 @@ Simple agent-based model simulation.
 
 ## Demo
 
-Game of life: https://ulasozguler.github.io/acan/#Game%20of%20Life
+Game of life: https://ulasozguler.github.io/acan/#game-of-life
 
-Langton's Ant: https://ulasozguler.github.io/acan/#Langton's%20Ant
+Langton's Ant: https://ulasozguler.github.io/acan/#langtons-ant
 
-Racist People: https://ulasozguler.github.io/acan/#Racist%20People
+Racist People: https://ulasozguler.github.io/acan/#racist-people

@@ -15,8 +15,12 @@ class Grid {
 
 	createCanvas() {
 		var canvas = document.getElementById(this.canvasID);
-		canvas.setAttribute('width', (this.xCellCount * this.cellSize) + 2 + '');
-		canvas.setAttribute('height', (this.yCellCount * this.cellSize) + 2 + '');
+		var w = (this.xCellCount * this.cellSize) + 2;
+		var h = (this.yCellCount * this.cellSize) + 2;
+		canvas.setAttribute('width', w + '');
+		canvas.setAttribute('height', h + '');
+		canvas.style.width = w + 'px';
+		canvas.style.height = h + 'px';
 		this.ctx = canvas.getContext('2d');
 	}
 
