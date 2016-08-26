@@ -136,7 +136,7 @@ class Grid {
 	}
 
 	updateData(cellDataArray) {
-		var start = +new Date();
+		//var start = +new Date();
 
 		this.clear();
 		for(var el of cellDataArray) {
@@ -145,19 +145,6 @@ class Grid {
 		grid.draw();
 
 		//console.log(+new Date() - start);  // track performance
-	}
-
-	getColorMapHTML() {
-		// TODO: not belongs here.
-		var html = '<table>';
-		for(let entry of this.colorMap.entries()) {
-			html += '<tr>';
-			html += '<td><div style="width: 15px; height: 15px; margin: 0 5px -3px 0; border: 1px solid grey; background: ' + entry[1] + '"></div></td>';
-			html += '<td>' + entry[0] + '</td>';
-			html += '</tr>';
-		}
-		html += '</table>';
-		return html;
 	}
 }
 

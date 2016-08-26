@@ -42,6 +42,12 @@ canvas {
 	margin: 15px 0;
 }
 
+.legendColor {
+	width: 15px;
+	height: 15px;
+	border: 1px solid grey;
+}
+
 #stats td {
 	font-size: 13px;
 }

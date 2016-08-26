@@ -22,3 +22,6 @@ class Simulation {
 
 // Can be used for custom colors of every state.
 Simulation.colorPicker = null;
+
+// Can be used for custom legend.
+Simulation.legend = null;
