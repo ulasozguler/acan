@@ -45,9 +45,32 @@
     var grid = new Grid('test', width, height);
 
     // helpers
+    function getColorMapHTML() {
+        var rowTemplate = '<tr><td><div class="legendColor" style="background: {color}"></div></td><td>{name}</td></tr>';
+
+        var html = '<table>';
+        if(world.sim.legend) {
+            var legendData = world.sim.legend();
+            for(var color in legendData) {
+                if(!legendData.hasOwnProperty(color)) continue;
+                var name = legendData[color];
+                if(color.charAt(0) != '#') {
+                    color = grid.colors[color];
+                }
+                html += rowTemplate.replace('{color}', color).replace('{name}', name);
+            }
+        } else {
+            for(var entry of grid.colorMap.entries()) {
+                html += rowTemplate.replace('{color}', entry[1]).replace('{name}', entry[0]);
+            }
+        }
+        html += '</table>';
+        return html;
+    }
+
     function redraw() {
         grid.updateData(world.getData());
-        document.getElementById('legend').innerHTML = grid.getColorMapHTML();
+        document.getElementById('legend').innerHTML = getColorMapHTML();
         renderStats();
     }
 
