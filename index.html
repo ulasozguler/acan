@@ -3,9 +3,6 @@
 <script src="js/grid.js"></script>
 <script src="js/world.js"></script>
 <script src="js/simulation-interface.js"></script>
-<script src="js/examples/game-of-life.js"></script>
-<script src="js/examples/langtons-ant.js"></script>
-<script src="js/examples/racist-people.js"></script>
 <link rel="stylesheet" href="main.css"/>
 
 <canvas id="test"></canvas>
@@ -37,10 +34,11 @@
         'Game of Life': 'game-of-life',
         'Langton\'s Ant': 'langtons-ant',
         'Racist People': 'racist-people',
-        'Forest Fire': 'forest-fire'
+        'Forest Fire': 'forest-fire',
+        'BZ Reaction': 'bz-reaction'
     };
     var width = 75;
-    var height = 50;
+    var height = 75;
 
     var world = new World(width, height);
     var grid = new Grid('test', width, height);
