@@ -94,7 +94,7 @@
     function loadFromCode() {
         pause();
 
-        var sim = eval(codeArea.value);
+        var sim = eval('(' + codeArea.value + ')');
         world.setSimulation(sim);
         world.reset();
 
