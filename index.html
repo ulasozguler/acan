@@ -14,6 +14,7 @@
     <a id="pause">Pause</a>
     <a id="step">Step</a>
     <a id="reset">Reset</a>
+    <a id="save">Save</a>
     <a id="load"><< Load</a>
 
     <label for="stepDelay">Step delay (ms)</label>
@@ -26,7 +27,14 @@
     <div id="legend"></div>
 </div>
 
-<textarea id="code"></textarea>
+<textarea id="code" class="cody"></textarea>
+
+<div id="overlay">
+    <div id="overlayPopup">
+        Sharable link: <br />
+        <input onclick="this.select()" id="urlBox" class="cody" readonly />
+    </div>
+</div>
 
 
 <script>
@@ -95,7 +103,11 @@
     function loadFromCode() {
         pause();
 
-        var sim = eval('(' + codeArea.value + ')');
+        try {
+            var sim = eval('(' + codeArea.value + ')');
+        } catch(e) {
+            alert('There is an error occured while loading the code.');
+        }
         world.setSimulation(sim);
         world.reset();
 
@@ -105,6 +117,16 @@
         }
 
         run();
+    }
+
+    function saveCode() {
+        var newUrl = window.location.origin + window.location.pathname + '#' + btoa(codeArea.value);
+        window.location = newUrl;
+        var urlBox = document.getElementById('urlBox');
+        urlBox.value = newUrl;
+
+        overlay.style.display = 'block';
+        urlBox.select();
     }
 
     function changeSim(sim) {
@@ -129,6 +151,10 @@
         document.getElementById('stats').innerHTML = html;
     }
 
+    function hideOverlay() {
+        overlay.style.display = 'none';
+    }
+
     // ui stuff
     var stepDelayInput = document.getElementById('stepDelay');
     var generationDisplay = document.getElementById('iterationCount');
@@ -137,8 +163,10 @@
     var stepButton = document.getElementById('step');
     var resetButton = document.getElementById('reset');
     var loadButton = document.getElementById('load');
+    var saveButton = document.getElementById('save');
     var simSelect = document.getElementById('simulation');
     var codeArea = document.getElementById('code');
+    var overlay = document.getElementById('overlay');
 
     // add simulations
     for(var sim in sims) {
@@ -171,6 +199,13 @@
         redraw();
     });
     loadButton.addEventListener('click', loadFromCode);
+    saveButton.addEventListener('click', saveCode);
+    overlay.addEventListener('click', function(e) {
+        if(e.srcElement.id == 'overlay') {
+            hideOverlay();
+        }
+    });
+
     simSelect.addEventListener('change', function(e) {
         changeSim(e.target.value);
     });
@@ -181,12 +216,33 @@
         if(window.location.hash) {
             sim = decodeURIComponent(window.location.hash.substring(1));
         }
+
+        var found = false;
         for(var simName in sims) {
             if(!sims.hasOwnProperty(simName)) continue;
             if(sim == sims[simName]) {
                 simSelect.value = sim;
                 changeSim(sim);
+                found = true;
             }
+        }
+
+        if(!found) {
+            codeArea.value = atob(sim);
+            loadFromCode();
+        }
+
+        // escape key handle
+        document.onkeydown = function(evt) {
+            evt = evt || window.event;
+            if(evt.keyCode == 27) {
+                overlay.style.display = 'none';
+            }
+        };
+
+        // ugh, firefox.
+        if(/Firefox/i.test(navigator.userAgent)) {
+            saveButton.style.display = 'none';
         }
     };
 </script>

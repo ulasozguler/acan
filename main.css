@@ -57,9 +57,34 @@ canvas {
 	padding-right: 5px;
 }
 
+.cody {
+	font-family: monospace;
+	font-size: 13px;
+}
+
 #code {
 	flex: 1 1 auto;
 	align-self: stretch;
-	font-family: monospace;
-	font-size: 13px;
+}
+
+#overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	margin: -10px;
+	display: none;
+}
+
+#overlayPopup {
+	display: block;
+	width: 300px;
+	margin: 250px auto 0;
+	padding: 10px;
+	background-color: white;
+}
+
+#overlay #urlBox {
+	width: 100%;
+	margin-top: 5px;
 }
