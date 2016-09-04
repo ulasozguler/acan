@@ -1,7 +1,3 @@
-* {
-	font-family: "Helvetica Neue", sans-serif;
-}
-
 body {
 	margin: 10px;
 	padding: 0;
@@ -12,6 +8,7 @@ body {
 	float: left;
 	margin: 0 10px;
 	text-align: center;
+	font-family: "Helvetica Neue", sans-serif;
 }
 
 #controls a, #controls input, #controls select {
@@ -62,9 +59,10 @@ canvas {
 	font-size: 13px;
 }
 
-#code {
+#code, .CodeMirror {
 	flex: 1 1 auto;
 	align-self: stretch;
+	height: 750px !important;
 }
 
 #overlay {
@@ -74,6 +72,7 @@ canvas {
 	background-color: rgba(0, 0, 0, 0.5);
 	margin: -10px;
 	display: none;
+	z-index: 100;
 }
 
 #overlayPopup {
