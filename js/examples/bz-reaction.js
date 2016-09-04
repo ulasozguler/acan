@@ -1,4 +1,4 @@
-class BZReaction extends Simulation { // Belousov–Zhabotinsky reaction
+class BZReaction extends Simulation { // Belousov-Zhabotinsky reaction
 	// conditions
 	// 0 = ok
 	// ... = infection stages
