@@ -6,6 +6,13 @@
 <script src="js/simulation-interface.js"></script>
 <link rel="stylesheet" href="main.css"/>
 
+<div id="overlay">
+    <div id="overlayPopup">
+        Sharable link: <br />
+        <input onclick="this.select()" id="urlBox" class="cody" readonly />
+    </div>
+</div>
+
 <canvas id="test"></canvas>
 
 <div id="controls">
@@ -28,13 +35,6 @@
 </div>
 
 <textarea id="code" class="cody"></textarea>
-
-<div id="overlay">
-    <div id="overlayPopup">
-        Sharable link: <br />
-        <input onclick="this.select()" id="urlBox" class="cody" readonly />
-    </div>
-</div>
 
 
 <script>
@@ -216,7 +216,7 @@
     loadButton.addEventListener('click', loadFromCode);
     saveButton.addEventListener('click', saveCode);
     overlay.addEventListener('click', function(e) {
-        if(e.srcElement.id == 'overlay') {
+        if(e.target.id == 'overlay') {
             hideOverlay();
         }
     });
@@ -254,10 +254,5 @@
                 overlay.style.display = 'none';
             }
         };
-
-        // ugh, firefox.
-        if(/Firefox/i.test(navigator.userAgent)) {
-            saveButton.style.display = 'none';
-        }
     };
 </script>
